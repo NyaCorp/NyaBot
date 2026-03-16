@@ -17,18 +17,18 @@ module.exports = {
                 await command.execute(interaction);
             } catch (error) {
                 console.error(`Error executing command ${interaction.commandName}:`, error);
-                
+
                 if (interaction.replied || interaction.deferred) {
                     await interaction.followUp({ content: 'An internal error occurred while executing this command.', ephemeral: true });
                 } else {
                     await interaction.reply({ content: 'An internal error occurred while executing this command.', ephemeral: true });
                 }
             }
-        } 
+        }
         else if (interaction.isButton()) {
             const currentContent = interaction.message.content;
             const parts = currentContent.split('] ');
-            
+
             let taskDescription = currentContent;
             let currentStatusFound = false;
 
@@ -42,13 +42,13 @@ module.exports = {
             }
 
             if (!currentStatusFound) {
-                await interaction.reply({ 
-                    content: 'The message is not in the expected format for updating.', 
-                    ephemeral: true 
+                await interaction.reply({
+                    content: 'The message is not in the expected format for updating.',
+                    ephemeral: true
                 });
                 return;
             }
-            
+
 
             let newStatus = '';
 
