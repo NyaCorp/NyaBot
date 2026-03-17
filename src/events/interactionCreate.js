@@ -1,4 +1,4 @@
-const { Events } = require('discord.js');
+const { Events, ModalBuilder, LabelBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const { ActionIds, StatusLabels } = require('../utils/constants');
 
 module.exports = {
@@ -26,8 +26,26 @@ module.exports = {
             }
         }
         else if (interaction.isButton()) {
+
+            // ========= NEW TASK MODAL ========= //
+            if (interaction.customId === ActionIds.NEW_TASK) {
+                const modal = new ModalBuilder().setCustomId('myModal').setTitle('My Modal');
+                const hobbiesInput = new TextInputBuilder()
+                    .setCustomId('hobbiesInput')
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('card games, films, books, etc.');
+
+                const hobbiesLabel = new LabelBuilder()
+                    .setLabel("What's some of your favorite hobbies?")
+                    .setDescription('Activities you like to participate in')
+                    .setTextInputComponent(hobbiesInput);
+
+                modal.addLabelComponents(hobbiesLabel);
+                return await interaction.showModal(modal);
+            }
+
+            // ========= CHANGE THE TASK STATUS ========= //
             const currentContent = interaction.message.content;
-            const parts = currentContent.split('] ');
 
             let taskDescription = currentContent;
             let currentStatusFound = false;

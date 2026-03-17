@@ -18,6 +18,10 @@ module.exports = {
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
+                    .setCustomId(ActionIds.NEW_TASK)
+                    .setLabel('New Task')
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
                     .setCustomId(ActionIds.NOT_STARTED)
                     .setLabel('Not Started')
                     .setStyle(ButtonStyle.Secondary),

@@ -2,7 +2,8 @@ const ActionIds = {
     NOT_STARTED: 'status_not_started',
     IN_PROGRESS: 'status_in_progress',
     DONE: 'status_done',
-    HOLD_OFF: 'status_hold_off'
+    HOLD_OFF: 'status_hold_off',
+    NEW_TASK: 'new_task'
 };
 
 const StatusLabels = {
