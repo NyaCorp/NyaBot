@@ -1,5 +1,5 @@
 const { Events, ModalBuilder, LabelBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { ActionIds, StatusLabels } = require('../utils/constants');
+const { ActionIds, StatusLabels, getCurrentDateHeader, KeysFooter } = require('../utils/constants');
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -42,7 +42,10 @@ module.exports = {
                     return interaction.reply({ content: 'The maximum limit is 25 tasks per list.', ephemeral: true });
                 }
 
-                const content = taskList.map(task => `${StatusLabels.NOT_STARTED} ${task}`).join('\n');
+                const header = getCurrentDateHeader();
+                const tasksString = taskList.map(task => `${StatusLabels.NOT_STARTED} ${task}`).join('\n');
+
+                const content = `${header}\n\n${tasksString}\n\n${KeysFooter}`;
 
                 const selectMenu = new StringSelectMenuBuilder()
                     .setCustomId('task_select_menu')
@@ -105,6 +108,7 @@ module.exports = {
                 modal.addLabelComponents(hobbiesLabel);
                 return await interaction.showModal(modal);
             }
+            
             if (interaction.customId.startsWith('update_task|')) {
                 const parts = interaction.customId.split('|');
                 const taskIndex = parseInt(parts[1], 10);
@@ -113,17 +117,29 @@ module.exports = {
                 const newStatus = StatusLabels[statusKey];
                 const lines = interaction.message.content.split('\n');
 
-                if (taskIndex >= 0 && taskIndex < lines.length) {
-                    let line = lines[taskIndex];
-
-                    for (const label of Object.values(StatusLabels)) {
-                        if (line.startsWith(label)) {
-                            line = line.replace(label, '').trim();
+                let taskLineCount = 0;
+                
+                for (let i = 0; i < lines.length; i++) {
+                    let line = lines[i];
+                    if (line === 'Keys:') {
+                        break;
+                    }
+                    
+                    let hasLabel = Object.values(StatusLabels).some(label => line.startsWith(label));
+                    
+                    if (hasLabel) {
+                        if (taskLineCount === taskIndex) {
+                            for (const label of Object.values(StatusLabels)) {
+                                if (line.startsWith(label)) {
+                                    line = line.replace(label, '').trim();
+                                    break;
+                                }
+                            }
+                            lines[i] = `${newStatus} ${line}`;
                             break;
                         }
+                        taskLineCount++;
                     }
-
-                    lines[taskIndex] = `${newStatus} ${line}`;
                 }
 
                 const selectRow = ActionRowBuilder.from(interaction.message.components[0]);
