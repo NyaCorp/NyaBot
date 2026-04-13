@@ -13,7 +13,34 @@ const StatusLabels = {
     HOLD_OFF: '<:cross:1482800878120603718>'
 };
 
+function getCurrentDateHeader() {
+    const formatter = new Intl.DateTimeFormat('es-MX', { 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric', 
+        timeZone: 'America/Mexico_City' 
+    });
+    
+    const parts = formatter.formatToParts(new Date());
+    const day = parts.find(p => p.type === 'day').value;
+    let month = parts.find(p => p.type === 'month').value;
+    const year = parts.find(p => p.type === 'year').value;
+    
+    month = month.charAt(0).toUpperCase() + month.slice(1);
+    
+    return `> ${day} de ${month} del ${year}`;
+}
+
+const KeysFooter = 
+    'Keys:\n' +
+    `${StatusLabels.NOT_STARTED} Not Started\n` +
+    `${StatusLabels.IN_PROGRESS} In Progress\n` +
+    `${StatusLabels.DONE} Done\n` +
+    `${StatusLabels.HOLD_OFF} Hold Off`;
+
 module.exports = {
     ActionIds,
-    StatusLabels
+    StatusLabels,
+    getCurrentDateHeader,
+    KeysFooter
 };
