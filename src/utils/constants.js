@@ -7,10 +7,10 @@ const ActionIds = {
 };
 
 const StatusLabels = {
-    NOT_STARTED: '<:checkwhite:1482800964179198176>',
-    IN_PROGRESS: '<:checkyellow:1482800590521110659>',
-    DONE: '<:checkmark:1482800932923113512>',
-    HOLD_OFF: '<:cross:1482800878120603718>'
+    NOT_STARTED: '<:checkwhite:1484050509890322463>',
+    IN_PROGRESS: '<:checkorange:1484050524440629298>',
+    DONE: '<:checkgreen:1484051164831023124>',
+    HOLD_OFF: '<:checkred:1484051149530202255>'
 };
 
 function getCurrentDateHeader() {
@@ -25,8 +25,6 @@ function getCurrentDateHeader() {
     const day = parts.find(p => p.type === 'day').value;
     let month = parts.find(p => p.type === 'month').value;
     const year = parts.find(p => p.type === 'year').value;
-    
-    month = month.charAt(0).toUpperCase() + month.slice(1);
     
     return `> ${day} de ${month} del ${year}`;
 }
